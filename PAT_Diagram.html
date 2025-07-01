@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAT System Architecture Diagram</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        
+        @media print {
+            body { 
+                margin: 0; 
+                font-size: 8px;
+                line-height: 1.1;
+            }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+            .diagram { 
+                font-size: 7px;
+                padding: 10px;
+                margin: 5px 0;
+            }
+            .header {
+                margin-bottom: 15px;
+            }
+            .section-title {
+                font-size: 10px;
+                margin: 15px 0 5px 0;
+            }
+        }
+        
+        body {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 9px;
+            line-height: 1.1;
+            margin: 15px;
+            background: white;
+            color: black;
+            max-width: 210mm;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .header h1 {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        
+        .header h3 {
+            font-size: 12px;
+            margin: 3px 0;
+        }
+        
+        .header p {
+            font-size: 10px;
+            margin: 3px 0;
+        }
+        
+        .diagram {
+            white-space: pre;
+            background: #f8f9fa;
+            padding: 8px;
+            border: 1px solid #ddd;
+            margin: 8px 0;
+            page-break-inside: avoid;
+            font-size: 7px;
+            overflow-x: auto;
+        }
+        
+        .section-title {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 11px;
+            margin: 15px 0 5px 0;
+            color: #333;
+            page-break-after: avoid;
+        }
+        
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        
+        .print-btn:hover {
+            background: #0056b3;
+        }
+        
+        table {
+            font-size: 8px;
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        table th, table td {
+            padding: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        table th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+        
+        .footer {
+            font-size: 7px;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn no-print" onclick="window.print()">PDF로 저장</button>
+    
+    <div class="header">
+        <h1>PAT System Architecture Diagram</h1>
+        <h3>Transnational Smart Energy Grid System</h3>
+        <p>Author: Jung Wook Yang | Date: July 2025</p>
+    </div>
+
+    <div class="section-title">1. PAT SYSTEM INTEGRATION</div>
+    <div class="diagram">┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              PAT SYSTEM INTEGRATION                             │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                  │
+│  │   PPR Engine    │  │ AIDoc Structure │  │  TTP Protocol   │                  │
+│  ├─────────────────┤  ├─────────────────┤  ├─────────────────┤                  │
+│  │ Context Analysis│  │  Data Objects   │  │   NL Parser     │                  │
+│  │ Auto Correction │  │  Quantum Hash   │  │   Task Trees    │                  │
+│  │ Self Evolution  │  │ Meta Analytics  │  │   Execution     │                  │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘                  │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                        TRANSNATIONAL ENERGY GRID LAYER                          │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
+│  │ Production  │  │Distribution │  │   Storage   │  │  Security   │             │
+│  │ Optimizer   │  │   Manager   │  │  Systems    │  │ Protocols   │             │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘             │
+│                                                                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
+│  │   Solar     │  │    Wind     │  │   Hydro     │  │   Nuclear   │             │
+│  │   Farms     │  │   Turbines  │  │   Plants    │  │   Reactors  │             │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘             │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                           GLOBAL INFRASTRUCTURE LAYER                           │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
+│  │North America│  │   Europe    │  │    Asia     │  │   Africa    │             │
+│  │   Grid      │  │    Grid     │  │    Grid     │  │    Grid     │             │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘             │
+│                                                                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
+│  │South America│  │  Oceania    │  │  Antarctica │  │ Inter-Ocean │             │
+│  │   Grid      │  │    Grid     │  │  Research   │  │   Cables    │             │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘             │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                              CORE METRICS LAYER                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
+│  │   Carbon    │  │   System    │  │   Energy    │  │     AI      │             │
+│  │ Reduction   │  │Availability │  │ Efficiency  │  │ Prediction  │             │
+│  │    98%      │  │   99.5%     │  │    95%      │  │   98.5%     │             │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘             │
+│                                                                                 │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
+│  │   Global    │  │   Energy    │  │ Investment  │  │   Crisis    │             │
+│  │ Production  │  │  Storage    │  │   Recovery  │  │  Response   │             │
+│  │  45.2 TW    │  │  12.8 TWh   │  │  15 Years   │  │ 45 Minutes  │             │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘             │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘</div>
+
+    <div class="page-break"></div>
+    <div class="section-title">2. PAT SYSTEM DATA FLOW</div>
+    <div class="diagram">┌─────────────────────────────────────────────────────────────────────────────────┐
+│                            PAT SYSTEM DATA FLOW                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  INPUT LAYER        PROCESSING LAYER       OUTPUT LAYER       ACTION LAYER      │
+│  ┌─────────────┐    ┌─────────────┐       ┌─────────────┐    ┌─────────────┐    │
+│  │   Sensor    │──▶│     PPR     │──────▶│  Prediction │──▶│ Grid Control│    │
+│  │    Data     │    │   Engine    │       │  Analysis   │    │ Adjustment  │    │
+│  └─────────────┘    └─────────────┘       └─────────────┘    └─────────────┘    │
+│                                                                                 │
+│  ┌─────────────┐    ┌─────────────┐       ┌─────────────┐    ┌─────────────┐    │
+│  │  Weather    │───▶│   AIDoc     │──────▶│ Resource    │───▶│ Energy      │    │
+│  │ Forecast    │    │ Processing  │       │ Allocation  │    │ Distribution│    │
+│  └─────────────┘    └─────────────┘       └─────────────┘    └─────────────┘    │
+│                                                                                 │
+│  ┌─────────────┐    ┌─────────────┐       ┌─────────────┐    ┌─────────────┐    │
+│  │  User       │───▶│     TTP     │──────▶│   Task      │───▶│ System      │    │
+│  │ Commands    │    │ Protocol    │       │ Execution   │    │ Response    │    │
+│  └─────────────┘    └─────────────┘       └─────────────┘    └─────────────┘    │
+│                                                                                 │
+│  ┌─────────────┐    ┌─────────────┐       ┌─────────────┐    ┌─────────────┐    │
+│  │   Market    │───▶│ Quantum     │──────▶│ Security    │───▶│ Blockchain  │    │
+│  │    Data     │    │Cryptography │       │Verification │    │ Trading     │    │
+│  └─────────────┘    └─────────────┘       └─────────────┘    └─────────────┘    │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘</div>
+
+    <div class="page-break"></div>
+    <div class="section-title">3. CRISIS RESPONSE PROTOCOL</div>
+    <div class="diagram">┌─────────────────────────────────────────────────────────────────────────────────┐
+│                          CRISIS RESPONSE PROTOCOL                               │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  PHASE 1: DETECTION     PHASE 2: ANALYSIS      PHASE 3: RESPONSE                │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐              │
+│  │   T+0:00 sec    │───▶│   T+0:03 sec    │───▶│   T+0:15 sec    │              │
+│  │ Crisis Detected │    │ PAT Analysis    │    │ Backup Systems  │              │
+│  │ ├─ Earthquake   │    │ ├─ Impact Scope │    │ ├─ Storage ESS  │              │
+│  │ ├─ Cyber Attack │    │ ├─ Resource Map │    │ ├─ Load Balance │              │
+│  │ └─ Power Outage │    │ └─ Strategy Gen │    │ └─ Grid Isolate │              │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘              │
+│                                                                                 │
+│  PHASE 4: RECOVERY      PHASE 5: OPTIMIZATION  PHASE 6: LEARNING                │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐              │
+│  │   T+0:45 min    │───▶│   T+2:30 hrs    │───▶│   T+24:00 hrs   │              │
+│  │ Full Restoration│    │ Normal Operation│    │ System Learning │              │
+│  │ ├─ Grid Rebuild │    │ ├─ Efficiency+  │    │ ├─ Update Model │              │
+│  │ ├─ Load Restore │    │ ├─ Prediction+  │    │ ├─ Improve PPR  │              │
+│  │ └─ Status Check │    │ └─ Monitoring   │    │ └─ Share Data   │              │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘              │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘</div>
+
+    <div class="section-title">System Specifications</div>
+    <div>
+        <table>
+            <tr>
+                <th>Component</th>
+                <th>Specification</th>
+                <th>Performance Target</th>
+            </tr>
+            <tr>
+                <td>PPR Engine</td>
+                <td>Context Analysis, Auto Correction, Self Evolution</td>
+                <td>98.5% Prediction Accuracy</td>
+            </tr>
+            <tr>
+                <td>AIDoc Structure</td>
+                <td>Data Objects, Quantum Hash, Meta Analytics</td>
+                <td>Real-time Processing</td>
+            </tr>
+            <tr>
+                <td>TTP Protocol</td>
+                <td>Natural Language Parser, Task Trees, Execution</td>
+                <td>99.5% System Availability</td>
+            </tr>
+            <tr>
+                <td>Energy Grid</td>
+                <td>Global Infrastructure, Multi-source Integration</td>
+                <td>98% Carbon Reduction</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 Jung Wook Yang | PAT System Research Project</p>
+        <p>Email: sadpig70@naver.com | GitHub: github.com/sadpig70/PAT-System</p>
+    </div>
+</body>
+</html>
