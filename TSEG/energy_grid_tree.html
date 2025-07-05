@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Energy Grid System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            overflow-x: auto;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(0, 255, 157, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00ff9d, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff9d, #00d4ff);
+            width: 100%;
+            animation: progressGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes progressGlow {
+            0% { box-shadow: 0 0 5px rgba(0, 255, 157, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(0, 255, 157, 0.8); }
+        }
+
+        .tree {
+            position: relative;
+            padding: 20px;
+        }
+
+        .node {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin: 10px 0;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .node:hover {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: #00ff9d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 157, 0.3);
+        }
+
+        .node.main {
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.2), rgba(0, 212, 255, 0.2));
+            border: 2px solid #00ff9d;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .node.level-1 {
+            margin-left: 40px;
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+        }
+
+        .node.level-1:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+
+        .node.level-2 {
+            margin-left: 80px;
+            background: rgba(255, 107, 107, 0.1);
+            border-color: #ff6b6b;
+            font-size: 0.9em;
+        }
+
+        .node.level-2:hover {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+        }
+
+        .node-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .node-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .node-id {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+
+        .connector {
+            position: absolute;
+            border-left: 2px solid rgba(0, 255, 157, 0.5);
+            left: 20px;
+        }
+
+        .connector.vertical {
+            width: 2px;
+            height: calc(100% - 20px);
+            top: 50px;
+        }
+
+        .connector.horizontal {
+            height: 2px;
+            width: 25px;
+            top: 50%;
+            border-left: none;
+            border-top: 2px solid rgba(0, 255, 157, 0.5);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #00ff9d;
+            color: #0f0f23;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .stats {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+        }
+
+        .stat-item {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .node-detail {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            max-width: 300px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .node-detail.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 Transnational Smart Energy Grid System</h1>
+            <div>📊 진행률: 100.0% (6/6) ✅ COMPLETED</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">🔋 Total Nodes: 19</div>
+            <div class="stat-item">✅ Completed: 19</div>
+            <div class="stat-item">📈 Success Rate: 100%</div>
+            <div class="stat-item">⚡ Status: OPERATIONAL</div>
+        </div>
+
+        <div class="tree">
+            <div class="node main pulse" data-info="메인 시스템 - 전 세계 스마트 에너지 그리드 통합 관리">
+                <span class="node-icon">🏗️</span>
+                <div class="node-title">Transnational Smart Energy Grid System</div>
+                <div class="node-id">(Main System)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-1" data-info="에너지 생산 시스템 - 다양한 재생에너지원 통합 관리">
+                <span class="node-icon">⚡</span>
+                <div class="node-title">Energy Production System</div>
+                <div class="node-id">(노드#Production)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="태양광 발전 유닛 - 태양 에너지 수집 및 변환">
+                <span class="node-icon">☀️</span>
+                <div class="node-title">Solar Power Generation Unit</div>
+                <div class="node-id">(노드#Solar)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="풍력 발전 유닛 - 풍력 에너지 수집 및 변환">
+                <span class="node-icon">💨</span>
+                <div class="node-title">Wind Power Generation Unit</div>
+                <div class="node-id">(노드#Wind)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="수력 발전 유닛 - 수력 에너지 수집 및 변환">
+                <span class="node-icon">🌊</span>
+                <div class="node-title">Hydro Power Generation Unit</div>
+                <div class="node-id">(노드#Hydro)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="원자력 발전 유닛 - 원자력 에너지 생산">
+                <span class="node-icon">⚛️</span>
+                <div class="node-title">Nuclear Power Generation Unit</div>
+                <div class="node-id">(노드#Nuclear)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="생산 최적화 AI - 에너지 생산 효율성 극대화">
+                <span class="node-icon">🤖</span>
+                <div class="node-title">Production Optimization AI</div>
+                <div class="node-id">(노드#ProdOptAI)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-1" data-info="에너지 배전 시스템 - 전력망 관리 및 최적화">
+                <span class="node-icon">🔌</span>
+                <div class="node-title">Energy Distribution System</div>
+                <div class="node-id">(노드#Distribution)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="송전망 관리 - 고압 전력 전송 네트워크 관리">
+                <span class="node-icon">🏗️</span>
+                <div class="node-title">Transmission Grid Management</div>
+                <div class="node-id">(노드#Transmission)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="배전망 최적화 - 지역별 전력 분배 최적화">
+                <span class="node-icon">📊</span>
+                <div class="node-title">Distribution Grid Optimization</div>
+                <div class="node-id">(노드#DistributionOpt)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="마이크로그리드 통합 - 소규모 지역 그리드 연결">
+                <span class="node-icon">🔗</span>
+                <div class="node-title">Microgrid Integration Module</div>
+                <div class="node-id">(노드#Microgrid)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-1" data-info="에너지 저장 시스템 - 전력 저장 및 관리">
+                <span class="node-icon">🔋</span>
+                <div class="node-title">Energy Storage System</div>
+                <div class="node-id">(노드#Storage)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="ESS 관리 - 에너지 저장 시스템 통합 관리">
+                <span class="node-icon">⚙️</span>
+                <div class="node-title">ESS Management</div>
+                <div class="node-id">(노드#ESSMgt)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="배터리 저장 최적화 - 배터리 충전/방전 최적화">
+                <span class="node-icon">🔋</span>
+                <div class="node-title">Battery Storage Optimization</div>
+                <div class="node-id">(노드#BattOpt)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-1" data-info="에너지 관리 시스템 - 전체 시스템 통합 관리">
+                <span class="node-icon">📈</span>
+                <div class="node-title">Energy Management System</div>
+                <div class="node-id">(노드#EMS)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="수요 예측 AI - 에너지 수요 예측 및 분석">
+                <span class="node-icon">🔮</span>
+                <div class="node-title">Demand Forecasting AI</div>
+                <div class="node-id">(노드#DemandForecast)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="에너지 거래 플랫폼 - 에너지 시장 거래 시스템">
+                <span class="node-icon">💰</span>
+                <div class="node-title">Energy Trading Platform</div>
+                <div class="node-id">(노드#EnergyTrade)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="글로벌 그리드 최적화 AI - 전 세계 그리드 통합 최적화">
+                <span class="node-icon">🌍</span>
+                <div class="node-title">Global Grid Optimization AI</div>
+                <div class="node-id">(노드#GlobalGridOpt)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-1" data-info="에너지 보안 시스템 - 사이버 및 물리적 보안">
+                <span class="node-icon">🛡️</span>
+                <div class="node-title">Energy Security System</div>
+                <div class="node-id">(노드#Security)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="사이버 보안 모듈 - 네트워크 및 데이터 보안">
+                <span class="node-icon">🔒</span>
+                <div class="node-title">Cyber Security Module</div>
+                <div class="node-id">(노드#CyberSec)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="물리적 보안 모듈 - 시설 및 장비 보안">
+                <span class="node-icon">🏛️</span>
+                <div class="node-title">Physical Security Module</div>
+                <div class="node-id">(노드#PhysicalSec)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-1" data-info="위기 대응 시스템 - 재해 및 비상상황 대응">
+                <span class="node-icon">🚨</span>
+                <div class="node-title">Crisis Response System</div>
+                <div class="node-id">(노드#CrisisResponse)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="재해 복구 프로토콜 - 재해 발생 시 복구 절차">
+                <span class="node-icon">🔄</span>
+                <div class="node-title">Disaster Recovery Protocol</div>
+                <div class="node-id">(노드#DisasterRec)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+
+            <div class="node level-2" data-info="비상 전력 재라우팅 - 비상시 전력 경로 변경">
+                <span class="node-icon">⚡</span>
+                <div class="node-title">Emergency Power Rerouting</div>
+                <div class="node-id">(노드#EmergencyReroute)</div>
+                <div class="status-badge">COMPLETED</div>
+            </div>
+        </div>
+
+        <div class="node-detail" id="nodeDetail">
+            <h3>시스템 정보</h3>
+            <p id="nodeInfo">노드를 클릭하면 상세 정보가 표시됩니다.</p>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.node').forEach(node => {
+            node.addEventListener('click', () => {
+                const info = node.getAttribute('data-info');
+                const title = node.querySelector('.node-title').textContent;
+                const id = node.querySelector('.node-id').textContent;
+                
+                const detail = document.getElementById('nodeDetail');
+                const infoElement = document.getElementById('nodeInfo');
+                
+                infoElement.innerHTML = `
+                    <strong>${title}</strong><br>
+                    <em>${id}</em><br><br>
+                    ${info}
+                `;
+                
+                detail.classList.add('show');
+                
+                // Remove glow from all nodes and add to clicked one
+                document.querySelectorAll('.node').forEach(n => n.style.boxShadow = '');
+                node.style.boxShadow = '0 0 30px rgba(0, 255, 157, 0.8)';
+            });
+        });
+
+        // Hide detail when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.node') && !e.target.closest('.node-detail')) {
+                document.getElementById('nodeDetail').classList.remove('show');
+                document.querySelectorAll('.node').forEach(n => n.style.boxShadow = '');
+            }
+        });
+
+        // Add floating particles effect
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                width: 2px;
+                height: 2px;
+                background: rgba(0, 255, 157, 0.6);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: -1;
+                left: ${Math.random() * window.innerWidth}px;
+                top: ${window.innerHeight}px;
+                animation: float 8s linear infinite;
+            `;
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 8000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 500);
+
+        // Add floating animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                to {
+                    transform: translateY(-${window.innerHeight + 100}px) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
